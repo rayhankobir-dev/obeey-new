@@ -12,7 +12,7 @@ function PopularListItem() {
           width={50}
         />
         <Button
-          className="w-full h-full absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-green-500 text-white group-hover:bg-green-500"
+          className="w-full h-full absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-green-500 text-white group-hover:bg-green-500 duration-400"
           size="icon"
           variant="ghost"
         >

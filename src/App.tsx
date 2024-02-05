@@ -1,9 +1,9 @@
-import Layout from "./podcast/layout";
+import CreatorHomePage from "./creator/pages/coreator-home";
 
 function App() {
   return (
     <>
-      <Layout />
+      <CreatorHomePage />
     </>
   );
 }
