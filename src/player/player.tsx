@@ -1,21 +1,42 @@
 import AudioPlayer from "react-h5-audio-player";
 import "react-h5-audio-player/lib/styles.css";
-import Lofi from "@/assets/podcasts/lofi.mp3";
 import Thumbnail1 from "@/assets/thumbnail-1.png";
+import { Button } from "@/lib/utils/ui/button";
+import { ArrowRight } from "lucide-react";
+import { useState } from "react";
 // import Ever from "@/assets/podcasts/ever.mp3";
 
 export default function Player() {
+  const [show, setShow] = useState(true);
+
   return (
-    <AudioPlayer
-      header={<PodcastInfo />}
-      layout="horizontal-reverse"
-      className="fixed z-10 px-4 py-5 bottom-0 right-0 w-full lg:w-4/5 flex bg-green-600 bg-opacity-80 backdrop-blur-3xl border  rounded-t-lg overflow-hidden text-white"
-      src={Lofi}
-      onPlay={(e) => console.log(e, "onPlay")}
-      onPlayError={() => {
-        alert("Problem to playing");
-      }}
-    />
+    <section
+      className={`${
+        show ? "lg:w-4/5" : "lg:w-48"
+      } w-full fixed z-10 bottom-0 right-0 flex bg-green-600 bg-opacity-80 backdrop-blur-3xl border rounded-t-lg overflow-hidden duration-500 group`}
+    >
+      <Button
+        className={`p-0 w-8 h-8 px-2 text-white rounded-none rounded-br-lg bg-green-600 hover:bg-green-800 opacity-0 group-hover:opacity-100 shadow-sm`}
+        onClick={() => {
+          setShow(!show);
+        }}
+      >
+        <ArrowRight size={18} />
+      </Button>
+
+      <AudioPlayer
+        header={<PodcastInfo />}
+        layout="horizontal-reverse"
+        className="bg-transparent py-5 px-4 text-white"
+        src={
+          "https://res.cloudinary.com/rayhankobirdev/video/upload/v1707244123/ever_qn8k4y.mp3"
+        }
+        onPlay={(e) => console.log(e, "onPlay")}
+        onPlayError={() => {
+          alert("Problem to playing");
+        }}
+      />
+    </section>
   );
 }
 

@@ -1,6 +1,3 @@
-import Banner1 from "@/assets/banner-1.png";
-import Banner2 from "@/assets/banner-2.png";
-import Banner3 from "@/assets/banner-3.png";
 import {
   Carousel,
   CarouselContent,
@@ -15,14 +12,26 @@ function BannerCarousel() {
     >
       <CarouselContent>
         <CarouselItem className="relative">
-          <img height={400} src={Banner1} className="rounded-xl object-cover" />
+          <img
+            height={400}
+            src="https://res.cloudinary.com/rayhankobirdev/image/upload/v1707244108/banner-2_bmvpxj.png"
+            className="rounded-xl object-cover"
+          />
           <div className="absolute top-[50%] bg-gradient-to-t from-white to-transparent"></div>
         </CarouselItem>
         <CarouselItem className="relative">
-          <img height={400} src={Banner2} className="rounded-xl object-cover" />
+          <img
+            height={400}
+            src="https://res.cloudinary.com/rayhankobirdev/image/upload/v1707244110/banner-3_l0wryc.png"
+            className="rounded-xl object-cover"
+          />
         </CarouselItem>
         <CarouselItem className="relative">
-          <img height={400} src={Banner3} className="rounded-xl object-cover" />
+          <img
+            height={400}
+            src="https://res.cloudinary.com/rayhankobirdev/image/upload/v1707244107/banner-1_vtywo1.png"
+            className="rounded-xl object-cover"
+          />
         </CarouselItem>
       </CarouselContent>
     </Carousel>

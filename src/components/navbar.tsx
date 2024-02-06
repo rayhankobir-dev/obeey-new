@@ -15,7 +15,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/lib/utils/ui/avatar";
 import { Button } from "@/lib/utils/ui/button";
 const user = {
-  img: "https://firebasestorage.googleapis.com/v0/b/socialstream-ba300.appspot.com/o/music_app_files%2Fartistes%2Fckay.jpg?alt=media&token=04b5367b-2c2a-4934-ad07-85ae7b8cf6f3",
+  img: "https://res.cloudinary.com/rayhankobirdev/image/upload/v1702226763/yruk4jqkfhm7s1uski5j.png",
   authenticated: true,
 };
 export default function Navbar() {
