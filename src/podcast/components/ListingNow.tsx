@@ -5,7 +5,7 @@ import { listenNowAlbums } from "../data/albums";
 
 export default function ListingNow() {
   return (
-    <>
+    <section className="mb-12">
       <div className="flex items-center justify-between">
         <div className="space-y-1">
           <h2 className="text-2xl font-semibold tracking-tight">Listen Now</h2>
@@ -32,6 +32,6 @@ export default function ListingNow() {
           <ScrollBar orientation="horizontal" />
         </ScrollArea>
       </div>
-    </>
+    </section>
   );
 }
