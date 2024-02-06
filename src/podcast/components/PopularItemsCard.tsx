@@ -3,7 +3,7 @@ import { ScrollArea } from "@/lib/utils/ui/scroll-area";
 
 export default function PopularItemsCard() {
   return (
-    <div className="w-full max-h-96 col-span-3 md:col-span-1 overflow-hidden shadow-sm border-2 border-slate-50 rounded-xl p-4">
+    <div className="w-full max-h-96 col-span-3 lg:col-span-1 overflow-hidden shadow-sm border-2 border-slate-50 rounded-xl p-4">
       <div>
         <h2 className="text-2xl font-semibold tracking-tight">
           Popular Podcasts

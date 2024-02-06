@@ -11,7 +11,7 @@ function BannerCarousel() {
   return (
     <Carousel
       opts={{ loop: true, direction: "ltr" }}
-      className="col-span-3 md:col-span-2 rounded-xl overflow-hidden"
+      className="col-span-3 md:col-span-3 lg:col-span-2 rounded-xl overflow-hidden"
     >
       <CarouselContent>
         <CarouselItem className="relative">

@@ -25,7 +25,7 @@ export function MobileSidebar() {
     <>
       <Sheet open={open} onOpenChange={setOpen}>
         <SheetTrigger asChild>
-          <MenuIcon />
+          <MenuIcon size={30} />
         </SheetTrigger>
         <SheetContent side="right" className="w-full !px-0">
           <div className="h-screen overflow-hidden overflow-y-scroll space-y-4 py-8 ">
