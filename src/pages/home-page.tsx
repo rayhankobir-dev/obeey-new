@@ -2,6 +2,7 @@ import Artists from "@/components/Artists";
 import Genres from "@/components/Genres";
 import Footer from "@/components/footer";
 import BannerCarousel from "@/podcast/components/BannerCarousel";
+import DownLoadCta from "@/podcast/components/DownLoadCta";
 import ListingNow from "@/podcast/components/ListingNow";
 import MadeForYou from "@/podcast/components/MadeForYou";
 import PopularItemsCard from "@/podcast/components/PopularItemsCard";
@@ -17,6 +18,7 @@ export default function HomePage() {
       <Artists />
       <Genres />
       <MadeForYou />
+      <DownLoadCta />
       <Footer />
     </>
   );
