@@ -41,7 +41,7 @@ const formSchema = z.object({
 type ProductFormValues = z.infer<typeof formSchema>;
 
 interface ProductFormProps {
-  initialData: any | object;
+  initialData?: any | object;
 }
 
 const genres = [

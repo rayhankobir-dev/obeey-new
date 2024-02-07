@@ -9,6 +9,7 @@ import PopularItemsCard from "./podcast/components/PopularItemsCard";
 import MadeForYou from "./podcast/components/MadeForYou";
 import Artists from "./components/Artists";
 import MyPodcasts from "./creator/components/my-podcasts";
+import { ContentCreateForm } from "./creator/components/add-content-form";
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
         <Route path="artists" element={<Artists />} />
         <Route path="creator-analytics" element={<CreatorAnalytics />} />
         <Route path="my-podcast" element={<MyPodcasts />} />
+        <Route path="add-podcast" element={<ContentCreateForm />} />
       </Route>
     </Routes>
   );
