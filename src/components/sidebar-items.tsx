@@ -1,16 +1,16 @@
 import { Link } from "react-router-dom";
 import { Icons } from "@/components/icons";
 import { cn } from "@/lib/utils";
-import { NavItem } from "@/types";
+import { SideBarItem } from "@/types";
 import { Dispatch, SetStateAction } from "react";
 import { useLocation } from "react-router-dom";
 
-interface DashboardNavProps {
-  items: NavItem[];
+interface SideBarItemsProps {
+  items: SideBarItem[];
   setOpen?: Dispatch<SetStateAction<boolean>>;
 }
 
-export function DashboardNav({ items, setOpen }: DashboardNavProps) {
+export default function SideBarItems({ items, setOpen }: SideBarItemsProps) {
   const location = useLocation();
   const path = location.pathname;
 

@@ -1,4 +1,4 @@
-import { NavItem } from "@/types";
+import { SideBarItem } from "@/types";
 
 export type User = {
   id: number;
@@ -121,7 +121,7 @@ export type Employee = {
   profile_picture?: string | null; // Profile picture can be a string (URL) or null (if no picture)
 };
 
-export const sideMenus: NavItem[] = [
+export const sideMenus: SideBarItem[] = [
   {
     type: "label",
     title: "Discover",
@@ -186,7 +186,7 @@ export const sideMenus: NavItem[] = [
   },
 ];
 
-export const creatorMenus: NavItem[] = [
+export const creatorMenus: SideBarItem[] = [
   {
     type: "label",
     title: "Discover",
@@ -251,7 +251,7 @@ export const creatorMenus: NavItem[] = [
   {
     type: "link",
     title: "Analytics",
-    href: "/my-analytics",
+    href: "/creator-analytics",
     icon: "stastics",
     label: "Analytics",
   },
@@ -264,7 +264,7 @@ export const creatorMenus: NavItem[] = [
   },
 ];
 
-export const adminMenus: NavItem[] = [
+export const adminMenus: SideBarItem[] = [
   {
     type: "label",
     title: "Dashboard",

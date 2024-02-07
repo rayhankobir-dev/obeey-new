@@ -1,15 +1,19 @@
 import { cn } from "@/lib/utils";
-import { DashboardNav } from "./sidebar-items";
-import { creatorMenus } from "@/constants/data";
+import SideBarItems from "./sidebar-items";
 import { ScrollArea } from "@/lib/utils/ui/scroll-area";
+import { SideBarItem } from "@/types";
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function Sidebar({ className }: string | any) {
+interface Props {
+  className: string;
+  menus: SideBarItem[];
+}
+
+export function Sidebar({ className, menus }: Props) {
   return (
     <aside className={cn("", className, "md:hidden lg:block bg-gray-50")}>
       <div className="w-64 max-w-96 fixed top-14 left-0 h-full space-y-4 py-4 bg-slate">
         <ScrollArea className="h-full">
-          <DashboardNav items={creatorMenus} />
+          <SideBarItems items={menus} />
         </ScrollArea>
       </div>
     </aside>

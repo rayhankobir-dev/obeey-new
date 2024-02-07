@@ -1,6 +1,6 @@
 import { Icons } from "@/components/icons";
 
-export interface NavItem {
+export interface SideBarItem {
   type: string;
   title: string;
   href?: string;
@@ -11,11 +11,11 @@ export interface NavItem {
   description?: string;
 }
 
-export interface NavItemWithChildren extends NavItem {
+export interface NavItemWithChildren extends SideBarItem {
   items: NavItemWithChildren[];
 }
 
-export interface NavItemWithOptionalChildren extends NavItem {
+export interface NavItemWithOptionalChildren extends SideBarItem {
   items?: NavItemWithChildren[];
 }
 
@@ -31,3 +31,4 @@ export interface FooterItem {
 export type MainNavItem = NavItemWithOptionalChildren;
 
 export type SidebarNavItem = NavItemWithChildren;
+export type GeoDataType = [string, number | string][];

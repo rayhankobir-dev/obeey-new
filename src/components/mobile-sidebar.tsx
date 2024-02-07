@@ -1,4 +1,4 @@
-import { DashboardNav } from "./sidebar-items";
+import SideBarItems from "./sidebar-items";
 import { Sheet, SheetContent, SheetTrigger } from "@/lib/utils/ui/sheet";
 import { creatorMenus } from "@/constants/data";
 import { MenuIcon } from "lucide-react";
@@ -31,7 +31,7 @@ export function MobileSidebar() {
           <div className="h-screen overflow-hidden overflow-y-scroll space-y-4 py-8 ">
             <div className="px-3 py-2">
               <div className="space-y-1">
-                <DashboardNav items={creatorMenus} setOpen={setOpen} />
+                <SideBarItems items={creatorMenus} setOpen={setOpen} />
               </div>
               <div className="grid grid-cols-2 gap-2 px-4 pt-6">
                 <Button
