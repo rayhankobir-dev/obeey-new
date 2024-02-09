@@ -1,6 +1,6 @@
 import { Separator } from "@/lib/utils/ui/separator";
 import { ScrollArea, ScrollBar } from "@/lib/utils/ui/scroll-area";
-import { AlbumArtwork } from "./album-artwork";
+import Podcast from "./podcast";
 import { listenNowAlbums } from "../data/albums";
 
 export default function ListingNow() {
@@ -18,14 +18,21 @@ export default function ListingNow() {
       <div className="relative">
         <ScrollArea>
           <div className="flex space-x-4 pb-4">
-            {listenNowAlbums.map((album) => (
-              <AlbumArtwork
-                key={album.name}
-                album={album}
-                className="w-[250px]"
+            {listenNowAlbums.map((album, index) => (
+              <Podcast
+                key={index}
+                className="w-[200px]"
                 aspectRatio="portrait"
-                width={250}
-                height={330}
+                width={200}
+                height={200}
+                podcast={{
+                  thumbnail:
+                    "https://images.unsplash.com/photo-1615247001958-f4bc92fa6a4a?w=300&dpr=2&q=80",
+                  title: "Convertion with Stive Jobs",
+                  audio: "ss",
+                  author: "Rayhan Kobir",
+                  description: "ss",
+                }}
               />
             ))}
           </div>

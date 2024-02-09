@@ -31,7 +31,7 @@ function MadeForYou() {
                 key={album.name}
                 album={album}
                 className="w-[150px]"
-                aspectRatio="square"
+                aspectRatio="portrait"
                 width={150}
                 height={150}
               />

@@ -2,7 +2,7 @@ import PodcastCard, { PodcastCardProps } from "@/components/podcast-card";
 import { Button } from "@/lib/utils/ui/button";
 import { Heading } from "@/lib/utils/ui/heading";
 import { Separator } from "@/lib/utils/ui/separator";
-import { Plus } from "lucide-react";
+import { Upload } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const podcast: PodcastCardProps = {
@@ -20,13 +20,13 @@ export default function MyPodcasts() {
         />
         <Button asChild variant="primary" className="px-3">
           <Link to={"/add-podcast"} className="gap-1">
-            <Plus size={17} />
-            Add Content
+            <Upload size={17} />
+            Upload Content
           </Link>
         </Button>
       </div>
       <Separator />
-      <div className="grid grid-cols-3 gap-3">
+      <div className="grid grid-cols-4 gap-3">
         <PodcastCard {...podcast} />
         <PodcastCard {...podcast} />
         <PodcastCard {...podcast} />

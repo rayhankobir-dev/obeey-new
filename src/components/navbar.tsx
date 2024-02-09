@@ -16,7 +16,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/lib/utils/ui/avatar";
 import { Button } from "@/lib/utils/ui/button";
 const user = {
   img: "https://res.cloudinary.com/rayhankobirdev/image/upload/v1702226763/yruk4jqkfhm7s1uski5j.png",
-  authenticated: true,
+  authenticated: false,
 };
 export default function Navbar() {
   return (
@@ -38,15 +38,13 @@ export default function Navbar() {
           </DropdownMenu>
         ) : (
           <div className="hidden lg:flex gap-2">
-            <Link to="/login">
-              <Button
-                variant="primaryOutline"
-                className="flex gap-1 py-2.5 text-sm rounded-xl "
-              >
-                <User size={18} />
-                Login
-              </Button>
-            </Link>
+            <Button
+              variant={"primaryOutline"}
+              className="flex gap-1 py-2.5 text-sm rounded-xl"
+            >
+              <User size={18} />
+              Login
+            </Button>
             <Link to="/register">
               <Button
                 variant="primary"

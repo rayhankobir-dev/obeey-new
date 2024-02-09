@@ -1,5 +1,6 @@
-import PopularListItem from "./PopularListItem";
+import { listenNowAlbums } from "../data/albums";
 import { ScrollArea } from "@/lib/utils/ui/scroll-area";
+import Podcast from "./podcast";
 
 export default function PopularItemsCard() {
   return (
@@ -15,14 +16,23 @@ export default function PopularItemsCard() {
 
       <ScrollArea className="w-full h-full py-2">
         <div className="grid gap-2">
-          <PopularListItem />
-          <PopularListItem />
-          <PopularListItem />
-          <PopularListItem />
-          <PopularListItem />
-          <PopularListItem />
-          <PopularListItem />
-          <PopularListItem />
+          {listenNowAlbums.map((album, index) => (
+            <Podcast
+              key={index}
+              className="w-[200px]"
+              aspectRatio="landscape"
+              width={200}
+              height={200}
+              podcast={{
+                thumbnail:
+                  "https://images.unsplash.com/photo-1615247001958-f4bc92fa6a4a?w=300&dpr=2&q=80",
+                title: "Convertion with Stive Jobs",
+                audio: "ss",
+                author: "Rayhan Kobir",
+                description: "ss",
+              }}
+            />
+          ))}
         </div>
       </ScrollArea>
     </div>

@@ -23,10 +23,8 @@ export default function Artists() {
           </p>
         </div>
       </div>
-      <div className="grid md:grid-cols-3 gap-3">
-        <ArtistCard {...artist} />
-        <ArtistCard {...artist} />
-        <ArtistCard {...artist} />
+      <div className="grid md:grid-cols-2 gap-3">
+        <ArtistCard key={"1"} {...artist} />
       </div>
     </section>
   );
@@ -57,12 +55,16 @@ export function ArtistCard({
         />
       </CardHeader>
       <CardContent className="px-4 py-5 pt-10 space-y-2">
-        <CardTitle className="flex justify-between gap-3">
-          <h2 className="truncate">{fullName}</h2> <Badge>{genre}</Badge>
-        </CardTitle>
+        <div className="flex justify-between gap-3">
+          <CardTitle className="py-1 truncate">{fullName}</CardTitle>
+          <Badge>{genre}</Badge>
+        </div>
         <p>{description}</p>
 
-        <Link to={""} className="inline-flex gap-1 items-center text-green-600">
+        <Link
+          to={"/"}
+          className="inline-flex gap-1 items-center text-green-600"
+        >
           <Eye size={20} /> View Contents
         </Link>
       </CardContent>

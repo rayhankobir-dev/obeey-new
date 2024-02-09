@@ -6,6 +6,7 @@ import DownLoadCta from "@/podcast/components/DownLoadCta";
 import ListingNow from "@/podcast/components/ListingNow";
 import MadeForYou from "@/podcast/components/MadeForYou";
 import PopularItemsCard from "@/podcast/components/PopularItemsCard";
+import OtpVerfication from "./otp-verfication";
 
 export default function HomePage() {
   return (
@@ -14,6 +15,7 @@ export default function HomePage() {
         <BannerCarousel />
         <PopularItemsCard />
       </section>
+      <OtpVerfication />
       <ListingNow />
       <Artists />
       <Genres />
