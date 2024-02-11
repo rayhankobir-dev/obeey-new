@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   Dialog,
   DialogContent,
@@ -19,29 +20,33 @@ import { FcGoogle } from "react-icons/fc";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
-import * as z from "zod";
 import { toast } from "@/lib/utils/ui/use-toast";
+import { useDispatch, useSelector } from "react-redux";
+import { setLoginModal, setRegisterModal } from "@/redux/slices/modalSlice";
+import * as z from "zod";
 
-const loginFormSchema = z.object({
+export const registerFormSchema = z.object({
+  firstName: z.string().min(3, { message: "Please enter valid email!" }),
   email: z.string().min(10, { message: "Please enter valid email!" }),
   password: z.string(),
 });
 
-export type LoginData = z.infer<typeof loginFormSchema>;
+export type RegisterData = z.infer<typeof registerFormSchema>;
 
-export default function LoginDialouge() {
+export default function RegisterModal() {
   const [loading, setLoading] = useState(false);
-  const [loginDialougeOpen, setLoginDialougeOpen] = useState(true);
+  const isOpen = useSelector((state: any) => state.modal.register);
+  const dispatch = useDispatch();
 
-  const loginForm = useForm<LoginData>({
-    resolver: zodResolver(loginFormSchema),
+  const registerForm = useForm<RegisterData>({
+    resolver: zodResolver(registerFormSchema),
     defaultValues: {
-      email: "",
-      password: "",
+      email: undefined,
+      password: undefined,
     },
   });
 
-  const onSubmit = async (data: LoginData) => {
+  const onSubmit = async (data: RegisterData) => {
     try {
       console.log(data);
       setLoading(true);
@@ -57,17 +62,19 @@ export default function LoginDialouge() {
 
   return (
     <Dialog
-      open={loginDialougeOpen}
-      onOpenChange={() => setLoginDialougeOpen(!loginDialougeOpen)}
+      open={isOpen}
+      onOpenChange={() => dispatch(setRegisterModal(!isOpen))}
     >
-      <DialogContent className="sm:max-w-[400px] z-[102] rounded-2xl">
-        <Form {...loginForm}>
+      <DialogContent className="max-w-[400px] z-[102] rounded-2xl">
+        <Form {...registerForm}>
           <form
-            onSubmit={loginForm.handleSubmit(onSubmit)}
+            onSubmit={registerForm.handleSubmit(onSubmit)}
             className="px-1 space-y-5 w-full relative"
           >
             <DialogHeader>
-              <DialogTitle className="text-2xl">Login Your Account</DialogTitle>
+              <DialogTitle className="text-2xl">
+                Register Your Account
+              </DialogTitle>
               <DialogDescription>
                 Please enter your credentials and wait for verfication email.
               </DialogDescription>
@@ -81,7 +88,23 @@ export default function LoginDialouge() {
             </Button>
             <div className="space-y-2">
               <FormField
-                control={loginForm.control}
+                control={registerForm.control}
+                name="firstName"
+                render={({ field }) => (
+                  <FormItem className="col-span-1 ">
+                    <FormControl className="h-12 rounded-xl">
+                      <Input
+                        disabled={loading}
+                        placeholder="First name"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage className="font-light px-1" />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={registerForm.control}
                 name="email"
                 render={({ field }) => (
                   <FormItem className="col-span-1 ">
@@ -98,7 +121,7 @@ export default function LoginDialouge() {
               />
 
               <FormField
-                control={loginForm.control}
+                control={registerForm.control}
                 name="password"
                 render={({ field }) => (
                   <FormItem className="col-span-1">
@@ -123,19 +146,22 @@ export default function LoginDialouge() {
                 className="w-full h-11 rounded-xl"
                 type="submit"
               >
-                Login
+                Create Account
               </Button>
             </DialogFooter>
           </form>
         </Form>
         <div className="mx-auto inline-flex items-center text-gray-500 text-light text-md">
-          <p>Don't have an account?</p>
+          <p>Already have an account?</p>
           <Button
-            onClick={() => setLoginDialougeOpen(false)}
+            onClick={() => {
+              dispatch(setRegisterModal(false));
+              dispatch(setLoginModal(true));
+            }}
             variant={"link"}
             className="text-green-600 px-1 py-1 h-fit"
           >
-            Create Account
+            Login
           </Button>
         </div>
       </DialogContent>

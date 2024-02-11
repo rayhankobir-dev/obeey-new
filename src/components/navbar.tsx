@@ -18,7 +18,12 @@ const user = {
   img: "https://res.cloudinary.com/rayhankobirdev/image/upload/v1702226763/yruk4jqkfhm7s1uski5j.png",
   authenticated: false,
 };
+import { useDispatch } from "react-redux";
+import { setLoginModal, setRegisterModal } from "@/redux/slices/modalSlice";
+
 export default function Navbar() {
+  const dispatch = useDispatch();
+
   return (
     <header className="w-full fixed top-0 left-0 z-[100] supports-backdrop-blur:bg-background/60 border-b flex items-center justify-between px-4 py-2.5 bg-gray-50 dark:bg-gray-800">
       <Link className="flex items-center" to="/">
@@ -41,19 +46,24 @@ export default function Navbar() {
             <Button
               variant={"primaryOutline"}
               className="flex gap-1 py-2.5 text-sm rounded-xl"
+              onClick={() => {
+                dispatch(setLoginModal(true));
+              }}
             >
               <User size={18} />
               Login
             </Button>
-            <Link to="/register">
-              <Button
-                variant="primary"
-                className="flex gap-1 py-2.5 text-sm rounded-xl"
-              >
-                <UserPlus size={18} />
-                Sign Up
-              </Button>
-            </Link>
+
+            <Button
+              variant="primary"
+              className="flex gap-1 py-2.5 text-sm rounded-xl"
+              onClick={() => {
+                dispatch(setRegisterModal(true));
+              }}
+            >
+              <UserPlus size={18} />
+              Sign Up
+            </Button>
           </div>
         )}
 

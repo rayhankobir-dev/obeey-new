@@ -1,6 +1,8 @@
 import Navbar from "@/components/navbar";
 import { Sidebar } from "@/components/sidebar";
-import LoginDialouge from "@/pages/login-page";
+import LoginModal from "@/pages/login-modal";
+import OtpVerification from "@/pages/otp-verfication";
+import RegisterModal from "@/pages/register-modal";
 import { SideBarItem } from "@/types";
 import { Outlet } from "react-router-dom";
 
@@ -18,7 +20,9 @@ export default function Layout({ items }: Props) {
           className="relative w-64 border-r hidden md:block"
         />
         <main className="flex-1 pt-6 px-4 overflow-y-auto">
-          <LoginDialouge />
+          <LoginModal />
+          <RegisterModal />
+          <OtpVerification />
           <Outlet />
         </main>
       </div>
