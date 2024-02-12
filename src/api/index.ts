@@ -1,14 +1,14 @@
 // axios.js
-import axios from "axios";
-import { store } from "@/redux/store";
-import { setTokens, clearAuthState, setUser } from "@/redux/features/authSlice";
+import { setTokens, setUser, clearAuthSate } from "@/redux/features/auth.slice";
 import { useNavigate } from "react-router-dom";
+import store from "@/redux/store";
+import axios from "axios";
 
-const instance = axios.create({
+const axiosClient = axios.create({
   baseURL: "http://localhost:3000/api/v1",
 });
 
-instance.interceptors.request.use(
+axiosClient.interceptors.request.use(
   (config) => {
     const accessToken = store.getState().auth.accessToken;
     if (accessToken) {
@@ -21,7 +21,7 @@ instance.interceptors.request.use(
   }
 );
 
-instance.interceptors.response.use(
+axiosClient.interceptors.response.use(
   (response) => {
     return response;
   },
@@ -40,9 +40,9 @@ instance.interceptors.response.use(
           },
         });
         store.dispatch(setUser(profileResponse.data.user));
-        return instance(originalRequest);
+        return axiosClient(originalRequest);
       } catch (error) {
-        store.dispatch(clearAuthState());
+        store.dispatch(clearAuthSate());
         const navigate = useNavigate();
         navigate("/login");
       }
@@ -51,4 +51,4 @@ instance.interceptors.response.use(
   }
 );
 
-export default instance;
+export default axiosClient;

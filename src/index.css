@@ -91,9 +91,7 @@
 
 .rhap_volume-bar {}
 
-.rhap_volume-indicator {
-  background: rgb(12, 140, 59);
-}
+
 
 .rhap_progress-bar {
   background: rgb(234, 234, 234);
@@ -135,6 +133,21 @@
 .rhap_button-clear.rhap_main-controls-button.rhap_play-pause-button {
   /* color: rgb(22, 163, 74); */
   color: white;
+}
+
+.rhap_volume-bar {
+  background: rgb(235, 235, 235);
+}
+
+.rhap_volume-indicator {
+  z-index: 100;
+  border: 1px solid rgb(217, 217, 217);
+  background: white;
+}
+
+
+.rhap_volume-filled {
+  background: rgb(12, 140, 59);
 }
 
 @media screen and (max-width: 767px) {

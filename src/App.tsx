@@ -1,23 +1,22 @@
 import { Route, Routes } from "react-router-dom";
-import CreatorAnalytics from "./creator/components/analytics";
-import Layout from "./components/layout";
-import { creatorMenus } from "./constants/data";
-import HomePage from "./pages/home-page";
-import ListingNow from "./podcast/components/ListingNow";
-import Genres from "./components/Genres";
-import PopularItemsCard from "./podcast/components/PopularItemsCard";
-import MadeForYou from "./podcast/components/MadeForYou";
-import Artists from "./components/Artists";
-import MyPodcasts from "./creator/components/my-podcasts";
-import { ContentCreateForm } from "./creator/components/add-content-form";
+import CreatorAnalytics from "./components/creator/analytics";
+import Layout from "./components/layout/layout";
+import HomePage from "./pages/home";
+import ListingNow from "./components/podcast/recent-listen";
+import Genres from "./components/podcast/genres";
+import PopularItemsCard from "./components/podcast/popular-card";
+import MadeForYou from "./components/podcast/made-for-you";
+import Artists from "./components/podcast/artists";
+import MyPodcasts from "./components/creator/my-podcasts";
+import { ContentCreateForm } from "./components/creator/add-content-form";
+import Podcasts from "./components/podcast/podcasts";
 
 function App() {
   return (
     <Routes>
-      <Route path="/" element={<Layout items={creatorMenus} />}>
+      <Route path="/" element={<Layout />}>
         <Route path="/" element={<HomePage />} />
         <Route path="listen-now" element={<ListingNow />} />
-        <Route path="browse" element={<ListingNow />} />
         <Route path="genres" element={<Genres />} />
         <Route path="playlists" element={<PopularItemsCard />} />
         <Route path="made-for-you" element={<MadeForYou />} />
@@ -25,6 +24,9 @@ function App() {
         <Route path="creator-analytics" element={<CreatorAnalytics />} />
         <Route path="my-podcast" element={<MyPodcasts />} />
         <Route path="add-podcast" element={<ContentCreateForm />} />
+        <Route path="podcast" element={<Podcasts />}>
+          <Route path=":genre" element={<Podcasts />} />
+        </Route>
       </Route>
     </Routes>
   );

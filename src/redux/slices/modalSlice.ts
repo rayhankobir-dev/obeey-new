@@ -21,7 +21,7 @@ const modalSlice = createSlice({
       state.confirmation = action.payload;
     },
     setOtpModal: (state, action) => {
-      state.confirmation = action.payload;
+      state.otp = action.payload;
     },
   },
 });
