@@ -16,7 +16,7 @@ import { SideBarItem } from "@/types";
 
 export default function Layout() {
   const { loading, isAuth, user }: any = useAuth();
-  const role: "USER" | "CREATOR" | "ADMIN" = user?.role.role || "USER";
+  const role: "CREATOR" | "USER" | "ADMIN" = isAuth ? user?.role?.role : "USER";
   const selectedMenu: SideBarItem[] = sideMenu[role];
 
   useEffect(() => {
