@@ -4,8 +4,9 @@ import axios, { AxiosInstance } from "axios";
 import toast from "react-hot-toast";
 import { handleRegisterModal } from "@/redux/actions/modal.action";
 
-const AuthContext = createContext();
+const AuthContext = createContext({});
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const axiosInstance = axios.create({
   baseURL: "http://localhost:3000/api/v1",
 });
@@ -13,9 +14,9 @@ export const axiosInstance = axios.create({
 export const AuthProvider = ({ children }: any) => {
   const [loading, setLoading] = useState(true);
   const [isAuth, setIsAuth] = useState(false);
-  const [user, setUser] = useState(null);
-  const [accessToken, setAccessToken] = useState(null);
-  const [refreshToken, setRefreshToken] = useState(null);
+  const [user, setUser] = useState({});
+  const [accessToken, setAccessToken] = useState("");
+  const [refreshToken, setRefreshToken] = useState("");
 
   useEffect(() => {
     const storedAccessToken: string | null =
@@ -42,7 +43,7 @@ export const AuthProvider = ({ children }: any) => {
       setIsAuth(true);
       setLoading(false);
     } catch (error) {
-      setUser(null);
+      setUser({});
       setIsAuth(false);
       setLoading(false);
     }
@@ -158,9 +159,9 @@ export const AuthProvider = ({ children }: any) => {
   };
 
   const logout = () => {
-    setAccessToken(null);
-    setRefreshToken(null);
-    setUser(null);
+    setAccessToken("");
+    setRefreshToken("");
+    setUser({});
     setIsAuth(false);
     setLoading(false);
     localStorage.removeItem("accessToken");

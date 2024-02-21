@@ -25,7 +25,6 @@ import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
 import * as z from "zod";
 import { useAxios } from "@/context/AuthContext";
-import { podcastSchema } from "@/validation/auth.validtion";
 import toast from "react-hot-toast";
 import SpinerLoading from "../spiner-loading";
 
@@ -56,8 +55,8 @@ export const ContentCreateForm: React.FC<ProductFormProps> = ({
   const [loading, setLoading] = useState(false);
   const [posting, setPosting] = useState(false);
   const [genres, setGenres] = useState([]);
-  const [selectedImage, setSelectedImage] = useState(null);
-  const [selectedAudio, setSelectedAudio] = useState(null);
+  const [selectedImage, setSelectedImage] = useState("");
+  const [selectedAudio, setSelectedAudio] = useState("");
   const [imageError, setImageError] = useState("");
   const [audioError, setAudioError] = useState("");
 
@@ -76,7 +75,7 @@ export const ContentCreateForm: React.FC<ProductFormProps> = ({
       setLoading(false);
     }
     fetchGenre();
-  }, []);
+  }, [api, genres, loading]);
 
   const defaultValues = initialData && initialData;
 

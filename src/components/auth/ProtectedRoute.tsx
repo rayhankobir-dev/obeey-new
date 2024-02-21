@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { handleLoginModal, handleOtpModal } from "@/redux/actions/modal.action";
+import { handleLoginModal } from "@/redux/actions/modal.action";
 import { Navigate, Route, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
@@ -14,7 +14,7 @@ const ProtectedRoute = ({ children }: any) => {
       handleLoginModal(true);
       navigate("/", { replace: true });
     }
-  }, []);
+  }, [isAuth, loading, navigate]);
 
   return children;
 };

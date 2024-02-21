@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable prefer-const */
 export function getAvatarFallbackLetter(
   firstName: string,
@@ -27,8 +28,11 @@ export function getAvatarFallbackLetter(
   }
 }
 
-export function flattenObject(obj: object, parentKey = "") {
-  let result: object = {};
+export function flattenObject(
+  obj: Record<string, any>,
+  parentKey = ""
+): Record<string, any> {
+  let result: Record<string, any> = {};
 
   for (let key in obj) {
     if (Object.prototype.hasOwnProperty.call(obj, key)) {

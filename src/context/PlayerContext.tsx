@@ -1,9 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { createContext, useContext, useState, useRef } from "react";
 
-const PlayerContext = createContext();
+const PlayerContext = createContext({});
 
 // Create a custom hook to access the player context
+// eslint-disable-next-line react-refresh/only-export-components
 export const usePlayer = () => useContext(PlayerContext);
 
 // Define the PlayerProvider component
@@ -12,14 +13,14 @@ export const PlayerProvider = ({ children }: any) => {
   const [isBackgroundPlay, setIsBackgroundPlay] = useState(false);
   const [currentPlayingPodcast, setCurrentPlayingPodcast] = useState(null);
   const playerRef = useRef(null);
-  const [ref, setPlayerRef] = useState(playerRef || null);
+  const [ref, setPlayerRef] = useState<any>(playerRef || null);
 
   const togglePlayer = () => {
     if (isPlaying) {
-      ref.current.audio.current.pause();
+      ref.current?.audio?.current.pause();
       setIsPlaying(false);
     } else {
-      ref.current.audio.current.play();
+      ref.current?.audio?.current.play();
       setIsPlaying(true);
     }
   };
