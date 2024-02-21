@@ -8,7 +8,7 @@ const AuthContext = createContext({});
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const axiosInstance = axios.create({
-  baseURL: "http://localhost:3000/api/v1",
+  baseURL: "https://podcast-obeey.koyeb.app/api/v1",
 });
 
 export const AuthProvider = ({ children }: any) => {
@@ -101,7 +101,7 @@ export const AuthProvider = ({ children }: any) => {
     try {
       setLoading(true);
       toast.promise(
-        axios.post("http://localhost:3000/api/v1/auth/signup", {
+        axios.post("https://podcast-obeey.koyeb.app/api/v1/auth/signup", {
           firstName,
           email,
           password,
@@ -136,7 +136,7 @@ export const AuthProvider = ({ children }: any) => {
     try {
       setLoading(true);
       const response = await axios.post(
-        "http://localhost:3000/api/v1/auth/login",
+        "https://podcast-obeey.koyeb.app/api/v1/auth/login",
         {
           email,
           password,
