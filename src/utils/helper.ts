@@ -1,3 +1,4 @@
+/* eslint-disable prefer-const */
 export function getAvatarFallbackLetter(
   firstName: string,
   lastName?: string
@@ -25,3 +26,28 @@ export function getAvatarFallbackLetter(
     return firstName[0].toUpperCase();
   }
 }
+
+export function flattenObject(obj: object, parentKey = "") {
+  let result: object = {};
+
+  for (let key in obj) {
+    if (Object.prototype.hasOwnProperty.call(obj, key)) {
+      const newKey = parentKey ? `${parentKey}_${key}` : key;
+
+      if (typeof obj[key] === "object" && obj[key] !== null) {
+        Object.assign(result, flattenObject(obj[key], newKey));
+      } else {
+        result[newKey] = obj[key];
+      }
+    }
+  }
+
+  return result;
+}
+
+// exclude object properties
+export const exclude = async (obj: object, keys: string[]) => {
+  return Object.fromEntries(
+    Object.entries(obj).filter(([key]) => !keys.includes(key))
+  );
+};

@@ -7,15 +7,21 @@ import { Toaster as ScToaster } from "./lib/utils/ui/toaster";
 import { Provider } from "react-redux";
 import store from "@/redux/store";
 import { Toaster } from "react-hot-toast";
+import { PlayerProvider } from "./context/PlayerContext.tsx";
+import { AuthProvider } from "./context/AuthContext.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <Provider store={store}>
-      <BrowserRouter>
-        <App />
-        <ScToaster />
-        <Toaster />
-      </BrowserRouter>
+      <PlayerProvider>
+        <AuthProvider>
+          <BrowserRouter>
+            <App />
+            <ScToaster />
+            <Toaster />
+          </BrowserRouter>
+        </AuthProvider>
+      </PlayerProvider>
     </Provider>
   </React.StrictMode>
 );

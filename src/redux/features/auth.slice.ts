@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const storedAccessToken = localStorage.getItem("accessToken") || null;
 const storedRefreshToken = localStorage.getItem("refreshToken") || null;
-const storedUser = null;
+const storedUser = JSON.parse(localStorage.getItem("user")) || null;
 
 export interface AuthStore {
   accessToken: string;

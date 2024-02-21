@@ -1,9 +1,29 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ScrollArea, ScrollBar } from "@/lib/utils/ui/scroll-area";
-import { madeForYouAlbums } from "../../constants/albums";
 import { Separator } from "@/lib/utils/ui/separator";
 import Podcast from "./podcast";
+import { useEffect, useState } from "react";
+import SpinerLoading from "../spiner-loading";
+import { useAxios } from "@/context/AuthContext";
 
 function MadeForYou() {
+  const [loading, setLoading] = useState(false);
+  const [podcasts, setPodcasts] = useState([]);
+  const api = useAxios();
+  useEffect(() => {
+    async function fetchMadeForYou() {
+      try {
+        setLoading(true);
+        const response = (await api.get("/podcast")).data;
+        const podcasts = response.data.podcasts;
+        setPodcasts(podcasts);
+      } catch (error) {
+        setLoading(false);
+      }
+    }
+    fetchMadeForYou();
+  }, []);
+
   return (
     <>
       <div className="mt-6 space-y-1">
@@ -16,40 +36,20 @@ function MadeForYou() {
       <div className="relative">
         <ScrollArea>
           <div className="flex space-x-4 pb-4">
-            {madeForYouAlbums.map((album, index) => (
-              <Podcast
-                key={index}
-                className="w-[200px]"
-                aspectRatio="portrait"
-                width={200}
-                height={200}
-                podcast={{
-                  thumbnail:
-                    "https://images.unsplash.com/photo-1615247001958-f4bc92fa6a4a?w=300&dpr=2&q=80",
-                  title: "Convertion with Stive Jobs",
-                  audio: "ss",
-                  author: "Rayhan Kobir",
-                  description: album.name,
-                }}
-              />
-            ))}
-            {madeForYouAlbums.map((album, index) => (
-              <Podcast
-                key={index}
-                className="w-[200px]"
-                aspectRatio="portrait"
-                width={200}
-                height={200}
-                podcast={{
-                  thumbnail:
-                    "https://images.unsplash.com/photo-1615247001958-f4bc92fa6a4a?w=300&dpr=2&q=80",
-                  title: "Convertion with Stive Jobs",
-                  audio: "ss",
-                  author: "Rayhan Kobir",
-                  description: album.name,
-                }}
-              />
-            ))}
+            {loading && podcasts.length == 0 ? (
+              <SpinerLoading />
+            ) : (
+              podcasts.map((podcast: any) => (
+                <Podcast
+                  key={podcast.id}
+                  className="w-[200px]"
+                  aspectRatio="portrait"
+                  width={200}
+                  height={200}
+                  podcast={podcast}
+                />
+              ))
+            )}
           </div>
           <ScrollBar orientation="horizontal" />
         </ScrollArea>

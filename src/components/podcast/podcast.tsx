@@ -3,8 +3,10 @@ import { IoMdPlayCircle } from "react-icons/io";
 import { PauseCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 import React from "react";
-import { setCurrentPlayPodcast } from "@/redux/slices/playerSlice";
-import { useDispatch, useSelector } from "react-redux";
+import { usePlayer } from "@/context/PlayerContext";
+import { useNavigate } from "react-router-dom";
+import { handleLoginModal } from "@/redux/actions/modal.action";
+import { useAuth } from "@/context/AuthContext";
 
 export type PodcastData = {
   thumbnail: string;
@@ -29,12 +31,29 @@ export default function Podcast({
   className,
   ...props
 }: PodcastProps) {
-  const dispatch = useDispatch();
-  const { currentPlayingPodcast } = useSelector((state: any) => state.player);
+  const { togglePlayer, currentPlayingPodcast, setCurrentPlayingPodcast }: any =
+    usePlayer();
+  const { isAuth }: any = useAuth();
+  const navigate = useNavigate();
+
+  const handlePlay = () => {
+    if (podcast.isPremium && !isAuth) {
+      handleLoginModal(true);
+    } else if (podcast.isPremium && isAuth) {
+      navigate("/subscription", { replace: true });
+    } else {
+      currentPlayingPodcast?.id === podcast.id
+        ? togglePlayer()
+        : setCurrentPlayingPodcast(podcast);
+    }
+  };
 
   if (aspectRatio === "landscape") {
     return (
-      <div className="group w-full h-16 flex items-center gap-4 p-2 rounded-lg bg-slate-100  cursor-pointer">
+      <div
+        onClick={handlePlay}
+        className="group w-full h-16 flex items-center gap-4 p-2 rounded-lg bg-slate-100  cursor-pointer"
+      >
         <div className="relative rounded-lg overflow-hidden">
           <img
             className="aspect-square rounded-lg object-cover"
@@ -58,13 +77,14 @@ export default function Podcast({
       </div>
     );
   }
+
   return (
     <div
       className={cn("rounded-md  overflow-hidden bg-gray-50 shadow", className)}
       {...props}
     >
       <div
-        onClick={() => dispatch(setCurrentPlayPodcast(podcast))}
+        onClick={handlePlay}
         className="relative overflow-hidden cursor-pointer group"
       >
         <img

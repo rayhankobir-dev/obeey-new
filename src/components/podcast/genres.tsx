@@ -1,20 +1,23 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable react-hooks/exhaustive-deps */
 import NoData from "@/assets/vectors/no-data.svg";
 import { AspectRatio } from "@/lib/utils/ui/aspect-ratio";
 import { Skeleton } from "@/lib/utils/ui/skeleton";
 import { Link } from "react-router-dom";
 import { Fragment, useEffect, useState } from "react";
-import axiosClient from "@/api";
 import { CardTitle } from "@/lib/utils/ui/card";
+import { useAxios } from "@/context/AuthContext";
 
 export default function Genres() {
-  const [genres, setGenres] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [genres, setGenres] = useState([]);
+  const api = useAxios();
 
   useEffect(() => {
     const fetchGenres = async () => {
       try {
-        const response = (await axiosClient.get("/genre")).data;
-        setGenres(response.data.genres);
+        const response = await api.get("/genre");
+        setGenres(response.data.data.genres);
         setLoading(false);
       } catch (error) {
         setLoading(false);
@@ -48,8 +51,8 @@ export default function Genres() {
             <GenreSkeleton />
             <GenreSkeleton />
           </Fragment>
-        ) : genres.length ? (
-          genres.map((genre: GenreData) => (
+        ) : genres.length > 0 ? (
+          genres.map((genre: any) => (
             <GenreCard
               key={genre.id}
               slug={genre.slug}

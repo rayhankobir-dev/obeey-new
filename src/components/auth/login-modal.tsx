@@ -28,11 +28,10 @@ import { useSelector } from "react-redux";
 import { useState } from "react";
 import * as z from "zod";
 import { useDispatch } from "react-redux";
-import { useLoginMutation } from "@/redux/features/api.slice";
-import { setTokens, setUser } from "@/redux/features/auth.slice";
 import SpinerLoading from "../spiner-loading";
 import { toast } from "@/lib/utils/ui/use-toast";
 import { loginFormSchema } from "@/validation/auth.validtion";
+import { useAuth } from "@/context/AuthContext";
 
 export type LoginFormData = z.infer<typeof loginFormSchema>;
 
@@ -40,9 +39,8 @@ export default function LoginModal() {
   const [loading, setLoading] = useState(false);
   const [passwordShow, setPasswordShow] = useState(true);
   const isOpen = useSelector((state: any) => state.modal.login);
-  const [login, { isLoading }] = useLoginMutation();
-  const dispatch = useDispatch();
 
+  const { login }: any = useAuth();
   const loginForm = useForm<LoginFormData>({
     mode: "onChange",
     resolver: zodResolver(loginFormSchema),
@@ -53,22 +51,10 @@ export default function LoginModal() {
   });
 
   const onSubmit = async (credentials: LoginFormData) => {
-    try {
-      setLoading(true);
-      const response: any = await login(credentials);
-      dispatch(setTokens(response.data.data.tokens));
-      dispatch(setUser(response.data.data.user));
-      handleRegisterModal(false);
-    } catch (error) {
-      toast({
-        variant: "error",
-        title: "Email or Password is Incorrect!",
-        description: "Please check your credentials and retry.",
-      });
-    } finally {
-      setLoading(false);
-      loginForm.reset();
-    }
+    setLoading(true);
+    await login(credentials.email, credentials.password);
+    handleLoginModal(false);
+    loginForm.reset();
   };
 
   return (
@@ -166,7 +152,7 @@ export default function LoginModal() {
                 className="w-full h-11 rounded-xl"
                 type="submit"
               >
-                {isLoading ? (
+                {loading ? (
                   <SpinerLoading
                     className="text-md text-white"
                     text="Authenticating"

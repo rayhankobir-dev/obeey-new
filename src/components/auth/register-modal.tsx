@@ -16,12 +16,11 @@ import {
 } from "@/lib/utils/ui/form";
 import { Eye, EyeOff, LockKeyhole, Mail, User } from "lucide-react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { toast } from "@/lib/utils/ui/use-toast";
 import { Button } from "@/lib/utils/ui/button";
 import { Input } from "@/lib/utils/ui/input";
 import { FcGoogle } from "react-icons/fc";
 import { useForm } from "react-hook-form";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { useState } from "react";
 import * as z from "zod";
 import {
@@ -29,18 +28,15 @@ import {
   handleRegisterModal,
 } from "@/redux/actions/modal.action";
 import { registerFormSchema } from "@/validation/auth.validtion";
-import { useSignupUserMutation } from "@/redux/features/api.slice";
-import { setTokens, setUser } from "@/redux/features/auth.slice";
 import SpinerLoading from "../spiner-loading";
+import { useAuth } from "@/context/AuthContext";
 
 export type RegisterData = z.infer<typeof registerFormSchema>;
 
 export default function RegisterModal() {
-  const [loading, setLoading] = useState(false);
   const [passwordShow, setPasswordShow] = useState(false);
   const isOpen = useSelector((state: any) => state.modal.register);
-  const [signupUser, { isLoading }] = useSignupUserMutation();
-  const dispatch = useDispatch();
+  const { loading, signUp }: any = useAuth();
 
   const registerForm = useForm<RegisterData>({
     mode: "onChange",
@@ -53,33 +49,7 @@ export default function RegisterModal() {
   });
 
   const onSubmit = async (userInfo: RegisterData) => {
-    try {
-      const response: any = await signupUser(userInfo);
-      if (response?.success) {
-        dispatch(setTokens(response.data.data.tokens));
-        dispatch(setUser(response.data.data.user));
-        setLoading(true);
-        setLoading(true);
-        handleRegisterModal(false);
-
-        toast({
-          variant: "success",
-          title: response.data.message,
-          description: "Thank you for joining with us.",
-        });
-      } else {
-        const { message } = response.error.data;
-        throw new Error(message);
-      }
-    } catch (error: any) {
-      toast({
-        variant: "error",
-        title: error.message,
-        description: "Please check your credentials and retry.",
-      });
-    } finally {
-      setLoading(false);
-    }
+    await signUp(userInfo.firstName, userInfo.email, userInfo.password);
   };
 
   return (
@@ -199,11 +169,7 @@ export default function RegisterModal() {
                 className="w-full h-11 rounded-xl"
                 type="submit"
               >
-                {isLoading ? (
-                  <SpinerLoading text="Creating" />
-                ) : (
-                  "Create Account"
-                )}
+                {loading ? <SpinerLoading text="Creating" /> : "Create Account"}
               </Button>
             </DialogFooter>
           </form>

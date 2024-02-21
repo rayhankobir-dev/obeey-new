@@ -1,14 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { axiosInstance } from "@/api/axios.config";
+
+import toast from "react-hot-toast";
 import { clearAuthSate } from "../features/auth.slice";
 import store from "../store";
 
 export async function logoutUser() {
   try {
-    const response: any = await axiosInstance.delete("/auth/logout");
-    console.log(response);
+    toast.success("Logout successfull");
     store.dispatch(clearAuthSate());
-  } catch (error) {
+  } catch (error: any) {
     console.log(error.response);
   }
 }

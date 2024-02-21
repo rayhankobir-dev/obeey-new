@@ -5,17 +5,19 @@ interface Props {
   className?: string;
   text?: string;
   size?: number;
+  textHidden?: boolean;
 }
 
 export default function SpinerLoading({
   className,
   text = "Loading..",
   size = 17,
+  textHidden = true,
 }: Props) {
   return (
     <span className={cn("flex gap-2 items-center", className)}>
       <ImSpinner2 size={size} className="animate-spin" />
-      {text}
+      {!textHidden && text}
     </span>
   );
 }

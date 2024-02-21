@@ -2,34 +2,45 @@
 import AudioPlayer from "react-h5-audio-player";
 import "react-h5-audio-player/lib/styles.css";
 import { Button } from "@/lib/utils/ui/button";
-import { ArrowRight, Rewind, FastForward, Volume, Volume2 } from "lucide-react";
+import { Rewind, FastForward, Volume, Volume2, EyeOff } from "lucide-react";
 import { FaCirclePlay, FaCirclePause } from "react-icons/fa6";
-
-import { useDispatch, useSelector } from "react-redux";
-import { setIsBackgrounPlay, setIsPlaying } from "@/redux/slices/playerSlice";
+import { usePlayer } from "@/context/PlayerContext";
 
 export default function Player() {
-  const { isBackgrounPlay, currentPlayingPodcast } = useSelector(
-    (state: any) => state.player
-  );
-  const dispatch = useDispatch();
+  const {
+    playerRef,
+    isPlaying,
+    setPlayerRef,
+    setIsPlaying,
+    isBackgroundPlay,
+    setIsBackgroundPlay,
+    currentPlayingPodcast,
+  }: any = usePlayer();
+
+  const handlePlaying = () => {
+    if (!isPlaying) {
+      setPlayerRef(playerRef);
+      setIsPlaying(true);
+    }
+  };
 
   return (
     <section
       className={`${
-        isBackgrounPlay || !currentPlayingPodcast ? "hidden" : "flex"
-      }  w-full lg:w-4/5 fixed z-10 bottom-0 right-0 flex bg-green-600 bg-opacity-80 backdrop-blur-3xl border rounded-t-lg overflow-hidden duration-500 group`}
+        isBackgroundPlay || currentPlayingPodcast == null
+          ? "opacity-0 hidden"
+          : "opacity-100 flex"
+      }  w-full lg:w-4/5 fixed z-10 bottom-0 right-0 flex bg-green-600 bg-opacity-80 backdrop-blur-3xl border rounded-t-lg overflow-hidden duration-700 group`}
     >
       <Button
-        className={`p-0 w-8 h-8 px-2 text-white rounded-none rounded-br-lg bg-green-600 hover:bg-green-800 opacity-0 group-hover:opacity-100 shadow-sm`}
-        onClick={() => {
-          dispatch(setIsBackgrounPlay(true));
-        }}
+        className={`p-0 w-8 h-8 px-2 text-white rounded-none rounded-br-lg bg-green-600 hover:bg-green-700 shadow-sm`}
+        onClick={() => setIsBackgroundPlay(true)}
       >
-        <ArrowRight size={18} />
+        <EyeOff size={18} />
       </Button>
 
       <AudioPlayer
+        ref={playerRef}
         showFilledVolume={true}
         showJumpControls={true}
         showDownloadProgress={false}
@@ -47,22 +58,24 @@ export default function Player() {
               thumbnail={currentPlayingPodcast.thumbnail}
               title={currentPlayingPodcast.title}
               author={currentPlayingPodcast.author.firstName}
+              genre={currentPlayingPodcast.genre.genreName}
             />
           )
         }
         layout="horizontal-reverse"
         className="bg-transparent py-5 px-4 text-white"
         src={currentPlayingPodcast?.audio}
-        onPlaying={() => dispatch(setIsPlaying(true))}
+        onPlaying={handlePlaying}
+        onPause={() => setIsPlaying(false)}
         onPlayError={() => {
-          alert("Problem to playing");
+          console.log("Error occuring to play audio");
         }}
       />
     </section>
   );
 }
 
-function PodcastInfo({ thumbnail, title, author }: any) {
+function PodcastInfo({ thumbnail, title, author, genre }: any) {
   return (
     <div className="max-w-1/3 flex flex-col md:flex-row items-center justify-center gap-4">
       <img
@@ -73,7 +86,9 @@ function PodcastInfo({ thumbnail, title, author }: any) {
       />
       <div className="flex-1 min-w-0 space-y-1">
         <h2 className="text-lg font-medium line-clamp-1 truncate">{title}</h2>
-        <p className="text-sm text-gray-100 line-clamp-1">{author}</p>
+        <p className="text-sm text-gray-100 line-clamp-1">
+          {author} - {genre}
+        </p>
       </div>
     </div>
   );

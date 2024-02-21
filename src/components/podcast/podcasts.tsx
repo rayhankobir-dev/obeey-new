@@ -6,7 +6,7 @@ import { Input } from "@/lib/utils/ui/input";
 import { Search } from "lucide-react";
 import { Fragment, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import axiosClient from "@/api";
+import { useAxios } from "@/context/AuthContext";
 
 export type PodcastData = {
   id: string;
@@ -24,13 +24,13 @@ export default function Podcasts({
   const [podcasts, setPodcasts] = useState([]);
   const [loading, setLoading] = useState(true);
   const { genre } = useParams();
+  const api = useAxios();
 
   useEffect(() => {
     const fetchGenres = async () => {
       try {
-        const response = (
-          await axiosClient.get(`/podcast${genre ? "/" + genre : ""}`)
-        ).data;
+        const response = (await api.get(`/podcast${genre ? "/" + genre : ""}`))
+          .data;
         setPodcasts(response.data.podcasts);
         setLoading(false);
       } catch (error) {
@@ -63,7 +63,7 @@ export default function Podcasts({
         </div>
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-5 gap-2 border-t py-2">
+      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-2 border-t py-2">
         {loading ? (
           <Fragment>
             <PodcastSkeleton variant="square" />
@@ -73,9 +73,9 @@ export default function Podcasts({
             <Podcast
               key={podcast.id}
               podcast={podcast}
-              width={200}
-              height={200}
-              className="w-[200px]"
+              width={220}
+              height={220}
+              className="w-full"
               aspectRatio="portrait"
             />
           ))

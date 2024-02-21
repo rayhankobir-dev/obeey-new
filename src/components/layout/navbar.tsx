@@ -6,6 +6,7 @@ import { MobileSidebar } from "./mobile-sidebar";
 import { Link } from "react-router-dom";
 import {
   CreditCard,
+  Eye,
   LogOut,
   PauseCircle,
   PlayCircle,
@@ -23,19 +24,22 @@ import {
   DropdownMenuTrigger,
 } from "@/lib/utils/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
-import { useSelector } from "react-redux";
+import { getAvatarFallbackLetter } from "@/utils/helper";
+import { usePlayer } from "@/context/PlayerContext";
 import {
   handleLoginModal,
   handleRegisterModal,
 } from "@/redux/actions/modal.action";
-import { getAvatarFallbackLetter } from "@/utils/helper";
-import { logoutUser } from "@/redux/actions/auth.action";
+import { useAuth } from "@/context/AuthContext";
 
 export default function Navbar() {
-  const { isPlaying, isBackgrounPlay } = useSelector(
-    (state: any) => state.player
-  );
-  const { user, isAuthenticated } = useSelector((state: any) => state.auth);
+  const {
+    isPlaying,
+    isBackgroundPlay,
+    setIsBackgroundPlay,
+    togglePlayer,
+  }: any = usePlayer();
+  const { isAuth, user }: any = useAuth();
 
   return (
     <header className="w-full fixed top-0 left-0 z-[100] supports-backdrop-blur:bg-background/60 border-b flex items-center justify-between px-4 py-2.5 bg-gray-50 dark:bg-gray-800">
@@ -44,22 +48,30 @@ export default function Navbar() {
         <span className="hidden md:block ml-2 text-xl font-bold">Obeey</span>
       </Link>
       <div className="flex gap-3 items-center">
-        {isBackgrounPlay && (
-          <div className="text-green-600 text-lg cursor-pointer">
-            {isPlaying ? (
-              <PauseCircle size={30} onClick={() => {}} />
-            ) : (
-              <PlayCircle size={30} onClick={() => {}} />
-            )}
-          </div>
+        {isBackgroundPlay && (
+          <>
+            <div className="text-green-600 text-lg cursor-pointer">
+              {isPlaying ? (
+                <PauseCircle size={30} onClick={() => togglePlayer()} />
+              ) : (
+                <PlayCircle size={30} onClick={() => togglePlayer()} />
+              )}
+            </div>
+            <Button
+              onClick={() => setIsBackgroundPlay(false)}
+              className="bg-green-100 text-green-600 hover:bg-gray-200 h-9 w-9 p-1 rounded-full"
+            >
+              <Eye />
+            </Button>
+          </>
         )}
-        {isAuthenticated ? (
+        {isAuth ? (
           <DropdownMenu>
             <DropdownMenuTrigger>
               <Avatar className="w-9 h-9">
-                <AvatarImage src={user.img} />
+                <AvatarImage src={user.avatar} />
                 <AvatarFallback className="bg-green-500 text-white">
-                  {getAvatarFallbackLetter(user.firstName, user.lastName)}
+                  {getAvatarFallbackLetter(user?.firstName, user?.lastName)}
                 </AvatarFallback>
               </Avatar>
             </DropdownMenuTrigger>
@@ -96,6 +108,8 @@ export default function Navbar() {
 }
 
 export function CreatorMenuContent() {
+  const { logout }: any = useAuth();
+
   return (
     <DropdownMenuContent className="z-[101] min-w-48">
       <DropdownMenuLabel>My Account</DropdownMenuLabel>
@@ -122,9 +136,7 @@ export function CreatorMenuContent() {
       </DropdownMenuGroup>
       <DropdownMenuSeparator />
       <DropdownMenuItem
-        onClick={() => {
-          logoutUser();
-        }}
+        onClick={logout}
         className="text-rose-500 hover:bg-rose-100 hover:text-rose-600 cursor-pointer"
       >
         <LogOut className="mr-2 h-4 w-4" />

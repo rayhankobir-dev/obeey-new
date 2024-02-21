@@ -4,7 +4,7 @@ import {
   setRegisterModal,
   setConfirmationModal,
   setOtpModal,
-} from "../slices/modalSlice";
+} from "../slices/modal.slide";
 
 const modalAction = {
   handleLoginModal: (action: boolean) => {

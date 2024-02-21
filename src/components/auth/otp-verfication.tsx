@@ -19,12 +19,18 @@ import * as z from "zod";
 import { handleOtpModal } from "@/redux/actions/modal.action";
 import { useSelector } from "react-redux";
 import { otpFormSchema } from "@/validation/auth.validtion";
+import { useAuth, useAxios } from "@/context/AuthContext";
+import toast from "react-hot-toast";
+import SpinerLoading from "../spiner-loading";
 
 type LoginFormValues = z.infer<typeof otpFormSchema>;
 
 export default function OtpVerification() {
+  const [sending, setSending] = useState(false);
   const [loading, setLoading] = useState(false);
   const isOpen = useSelector((state: any) => state.modal.otp);
+  const { setUser }: any = useAuth();
+  const api = useAxios();
 
   // reference of the input element
   const inputRefs = [
@@ -44,17 +50,6 @@ export default function OtpVerification() {
   useEffect(() => {
     inputRefs[0].current?.focus();
   });
-
-  const onSubmit = async (data: LoginFormValues) => {
-    try {
-      console.log(data);
-      setLoading(true);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const handleInputChange = (
     index: number,
@@ -84,6 +79,32 @@ export default function OtpVerification() {
       );
       otpForm.setValue("otp", otpArray.join(""));
       inputRefs[0].current?.focus();
+    }
+  };
+
+  const handleResentOtp = async () => {
+    try {
+      setSending(true);
+      const response = await api.post("/auth/send-otp");
+      toast.success(response.data.message);
+    } catch (error: any) {
+      toast.error(error.response.data.message);
+    } finally {
+      setSending(false);
+    }
+  };
+
+  const onSubmit = async (payload: LoginFormValues) => {
+    try {
+      setLoading(true);
+      const response = await api.post("/auth/verify-otp", payload);
+      setUser(response.data.data);
+      toast.success(response.data.message);
+    } catch (error: any) {
+      toast.error(error.response.data.message);
+    } finally {
+      setLoading(false);
+      handleOtpModal(false);
     }
   };
 
@@ -139,7 +160,11 @@ export default function OtpVerification() {
                 className="w-full h-11 rounded-xl text-md font-normal"
                 type="submit"
               >
-                Verify
+                {loading ? (
+                  <SpinerLoading text="Verifying.." textHidden={false} />
+                ) : (
+                  "Verify"
+                )}
               </Button>
             </DialogFooter>
           </form>
@@ -147,11 +172,12 @@ export default function OtpVerification() {
         <div className="mx-auto inline-flex items-center text-gray-500 text-light text-md">
           <p>You didn't get the verification code?</p>
           <Button
-            onClick={() => handleOtpModal(false)}
+            disabled={sending}
+            onClick={handleResentOtp}
             variant={"link"}
             className="text-green-600 px-1 py-1 h-fit"
           >
-            Resend
+            {sending ? "Sending.." : "Resend"}
           </Button>
         </div>
       </DialogContent>

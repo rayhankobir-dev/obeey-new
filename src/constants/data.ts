@@ -121,71 +121,6 @@ export type Employee = {
   profile_picture?: string | null; // Profile picture can be a string (URL) or null (if no picture)
 };
 
-export const sideMenus: SideBarItem[] = [
-  {
-    type: "label",
-    title: "Discover",
-    icon: "globe",
-    description: "Discover podcasts",
-  },
-
-  {
-    type: "link",
-    title: "Listen Now",
-    href: "/listen-now",
-    icon: "playCircle",
-    label: "Listen Now",
-  },
-  {
-    type: "link",
-    title: "Browse",
-    href: "/podcast",
-    icon: "layoutGrid",
-    label: "Browse",
-  },
-  {
-    type: "link",
-    title: "Genres",
-    href: "/genres",
-    icon: "radio",
-    label: "Genres",
-  },
-  {
-    type: "label",
-    title: "Library",
-    icon: "library",
-    description: "Your all Libraries",
-  },
-  {
-    type: "button",
-    title: "Playlists",
-    href: "/playlists",
-    icon: "musicList",
-    label: "Playlists",
-  },
-  {
-    type: "link",
-    title: "Made for You",
-    href: "/made-for-you",
-    icon: "user",
-    label: "Made for You",
-  },
-  {
-    type: "link",
-    title: "Artists",
-    href: "/artists",
-    icon: "mic2",
-    label: "reports",
-  },
-  {
-    type: "link",
-    title: "Albums",
-    href: "/albums",
-    icon: "album",
-    label: "Album",
-  },
-];
-
 export interface SideBar {
   USER: SideBarItem[];
   CREATOR: SideBarItem[];
@@ -229,7 +164,7 @@ export const sideMenu: SideBar = {
       description: "Your all Libraries",
     },
     {
-      type: "button",
+      type: "link",
       title: "Playlists",
       href: "/playlists",
       icon: "musicList",
@@ -251,10 +186,10 @@ export const sideMenu: SideBar = {
     },
     {
       type: "link",
-      title: "Albums",
-      href: "/albums",
-      icon: "album",
-      label: "Album",
+      title: "Subscription",
+      href: "/subscription",
+      icon: "coinHand",
+      label: "reports",
     },
   ],
   CREATOR: [
@@ -312,6 +247,13 @@ export const sideMenu: SideBar = {
       href: "/artists",
       icon: "mic2",
       label: "reports",
+    },
+    {
+      type: "link",
+      title: "Subscriptions",
+      href: "/subscription",
+      icon: "coinHand",
+      label: "Subscriptions",
     },
     {
       type: "label",
@@ -392,139 +334,3 @@ export const sideMenu: SideBar = {
     },
   ],
 };
-
-export const creatorMenus: SideBarItem[] = [
-  {
-    type: "label",
-    title: "Discover",
-    icon: "globe",
-    description: "Discover podcasts",
-  },
-
-  {
-    type: "link",
-    title: "Listen Now",
-    href: "/listen-now",
-    icon: "playCircle",
-    label: "Listen Now",
-  },
-  {
-    type: "link",
-    title: "Browse",
-    href: "/podcast",
-    icon: "layoutGrid",
-    label: "Browse",
-  },
-  {
-    type: "link",
-    title: "Genres",
-    href: "/genres",
-    icon: "radio",
-    label: "Genres",
-  },
-  {
-    type: "label",
-    title: "Library",
-    icon: "library",
-    description: "Your all Libraries",
-  },
-  {
-    type: "link",
-    title: "Playlists",
-    href: "/playlists",
-    icon: "musicList",
-    label: "Playlists",
-  },
-  {
-    type: "link",
-    title: "Made for You",
-    href: "/made-for-you",
-    icon: "user",
-    label: "Made for You",
-  },
-  {
-    type: "link",
-    title: "Artists",
-    href: "/artists",
-    icon: "mic2",
-    label: "reports",
-  },
-  {
-    type: "label",
-    title: "Your Contents",
-    icon: "podcast",
-    description: "Your all contents",
-  },
-  {
-    type: "link",
-    title: "Analytics",
-    href: "/creator-analytics",
-    icon: "stastics",
-    label: "Analytics",
-  },
-  {
-    type: "link",
-    title: "Podcasts",
-    href: "/my-podcast",
-    icon: "musicList",
-    label: "Playlists",
-  },
-];
-
-export const adminMenus: SideBarItem[] = [
-  {
-    type: "label",
-    title: "Dashboard",
-    icon: "globe",
-    description: "Admin dashboard controls",
-  },
-
-  {
-    type: "link",
-    title: "Analytics",
-    href: "/admin-analytics",
-    icon: "stastics",
-    label: "Analytics",
-  },
-  {
-    type: "link",
-    title: "Artists",
-    href: "/artists",
-    icon: "mic2",
-    label: "Artists",
-  },
-  {
-    type: "link",
-    title: "Listners",
-    href: "/listners",
-    icon: "user",
-    label: "Listners",
-  },
-  {
-    type: "label",
-    title: "Contents",
-    icon: "library",
-    description: "Informations about contents",
-  },
-  {
-    type: "link",
-    title: "Contents",
-    href: "/playlists",
-    icon: "podcast",
-    label: "Playlists",
-  },
-  {
-    type: "link",
-    title: "Payrolls",
-    href: "/payrolls",
-    icon: "pay",
-    label: "Made for You",
-  },
-  {
-    type: "link",
-    title: "Transactions",
-    href: "/transaction",
-    icon: "transaction",
-    label: "Transaction",
-  },
-];

@@ -22,20 +22,18 @@ import { Label } from "@/lib/utils/ui/label";
 import { Input } from "@/lib/utils/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import * as z from "zod";
+import { useAxios } from "@/context/AuthContext";
+import { podcastSchema } from "@/validation/auth.validtion";
+import toast from "react-hot-toast";
+import SpinerLoading from "../spiner-loading";
 
 const formSchema = z.object({
-  title: z
-    .string()
-    .min(10, { message: "Title must grater than 10 characters" }),
-  genre: z.string(),
+  title: z.string().min(10, {}),
+  genreId: z.string(),
   language: z.string(),
-  description: z
-    .string()
-    .min(10, { message: "Description must grater than 10 characters" }),
-  thumbnail: z.string().url({ message: "Please enter thumbnail image" }),
-  audio: z.string().url({ message: "Please enter audio file" }),
+  description: z.string().min(10, { message: "Please" }),
 });
 
 type ProductFormValues = z.infer<typeof formSchema>;
@@ -43,14 +41,6 @@ type ProductFormValues = z.infer<typeof formSchema>;
 interface ProductFormProps {
   initialData?: any | object;
 }
-
-const genres = [
-  { id: 1, name: "History" },
-  { id: 2, name: "Cribe" },
-  { id: 3, name: "Finance" },
-  { id: 4, name: "Word" },
-  { id: 5, name: "Books" },
-];
 
 const languages = [
   { id: 1, name: "Bangla" },
@@ -64,22 +54,31 @@ export const ContentCreateForm: React.FC<ProductFormProps> = ({
   initialData,
 }) => {
   const [loading, setLoading] = useState(false);
+  const [posting, setPosting] = useState(false);
+  const [genres, setGenres] = useState([]);
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [selectedAudio, setSelectedAudio] = useState(null);
+  const [imageError, setImageError] = useState("");
+  const [audioError, setAudioError] = useState("");
+
   const title = initialData ? "Edit Content" : "Add New Content";
   const description = initialData
     ? "Please update your content and wait until approved."
     : "Please upload your original content and wait until approved.";
   const action = initialData ? "Save changes" : "Add Content";
+  const api = useAxios();
 
-  const defaultValues = initialData
-    ? initialData
-    : {
-        title: "",
-        genre: "",
-        language: "",
-        thumbnail: "",
-        description: "",
-        audio: "",
-      };
+  useEffect(() => {
+    async function fetchGenre() {
+      setLoading(true);
+      const response = await api.get("/genre");
+      setGenres(response.data.data.genres);
+      setLoading(false);
+    }
+    fetchGenre();
+  }, []);
+
+  const defaultValues = initialData && initialData;
 
   // create new form state
   const form = useForm<ProductFormValues>({
@@ -88,15 +87,87 @@ export const ContentCreateForm: React.FC<ProductFormProps> = ({
   });
 
   // on submit action
-  const onSubmit = async (data: ProductFormValues) => {
-    try {
-      console.log(data);
-      setLoading(true);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
+  const onSubmit = async (payload: ProductFormValues) => {
+    if (validateImage(selectedImage) && validateAudio(selectedAudio)) {
+      try {
+        setPosting(true);
+        const formData = new FormData();
+        formData.append("title", payload.title);
+        formData.append("genreId", payload.genreId);
+        formData.append("language", payload.language);
+        formData.append("description", payload.description);
+        formData.append("thumbnail", selectedImage);
+        formData.append("audio", selectedAudio);
+
+        const response = await api.post("/podcast", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+        toast.success(response.data.message);
+      } catch (error: any) {
+        toast.error(error.response.data.message);
+      } finally {
+        setPosting(false);
+      }
     }
+  };
+
+  function validateImage(selectedImage: any): boolean {
+    const maxSize = 5 * 1024 * 1024;
+    if (!selectedImage) {
+      setImageError("Thumbnail is required");
+      return false;
+    } else if (selectedImage.size > maxSize) {
+      setImageError("Thumbnail exceeds maximum file size (5MB)");
+      return false;
+    } else {
+      const allowedFormats = ["jpg", "jpeg", "png", "webp"];
+      const fileNameParts = selectedImage.name.split(".");
+      const fileExtension =
+        fileNameParts[fileNameParts.length - 1].toLowerCase();
+      if (!allowedFormats.includes(fileExtension)) {
+        setImageError("Thumbnail format is not supported(jpg,jpeg,png,webp)");
+        return false;
+      }
+      setImageError("");
+      return true;
+    }
+  }
+
+  function validateAudio(selectedAudio: any): boolean {
+    const maxSize = 50 * 1024 * 1024;
+    if (!selectedAudio) {
+      setAudioError("Audio is required");
+      return false;
+    } else if (selectedAudio.size > maxSize) {
+      setAudioError("Audio exceeds maximum file size (50MB)");
+      return false;
+    } else {
+      const allowedFormats = ["mp3", "wav", "mpeg"];
+      const fileNameParts = selectedAudio.name.split(".");
+      const fileExtension =
+        fileNameParts[fileNameParts.length - 1].toLowerCase();
+      if (!allowedFormats.includes(fileExtension)) {
+        setAudioError("Audio format is not supported(mpeg,wav,mp3)");
+        return false;
+      } else {
+        setAudioError("");
+        return true;
+      }
+    }
+  }
+
+  const handleImageChange = (event: any) => {
+    const file = event.target.files[0];
+    setSelectedImage(file);
+    validateImage(file);
+  };
+
+  const handleAudioChange = (event: any) => {
+    const file = event.target.files[0];
+    setSelectedAudio(file);
+    validateAudio(file);
   };
 
   return (
@@ -111,150 +182,157 @@ export const ContentCreateForm: React.FC<ProductFormProps> = ({
             onSubmit={form.handleSubmit(onSubmit)}
             className="px-1 space-y-8 w-full relative"
           >
-            <div className="md:grid md:grid-cols-2 lg:grid-cols-3 gap-x-5 md:gap-y-3">
-              <FormField
-                control={form.control}
-                name="title"
-                render={({ field }) => (
-                  <FormItem className="col-span-1">
-                    <Label>Content Title</Label>
-                    <FormControl>
-                      <Input
-                        disabled={loading}
-                        placeholder="Title of your content"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage className="font-light" />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="genre"
-                render={({ field }) => (
-                  <FormItem>
-                    <Label>Genre</Label>
-                    <Select
-                      disabled={loading}
-                      onValueChange={field.onChange}
-                      value={field.value}
-                      defaultValue={field.value}
-                    >
+            <div className="grid md:grid-cols-2 gap-3">
+              <div className="col-span-2">
+                <FormField
+                  control={form.control}
+                  name="title"
+                  render={({ field }) => (
+                    <FormItem className="col-span-1">
+                      <Label>Content Title</Label>
                       <FormControl>
-                        <SelectTrigger>
-                          <SelectValue
-                            defaultValue={field.value}
-                            placeholder="Slect genre of Content"
-                          />
-                        </SelectTrigger>
+                        <Textarea
+                          disabled={loading}
+                          placeholder="Title of your content"
+                          {...field}
+                        />
                       </FormControl>
-                      <SelectContent>
-                        {genres.map((genre) => (
-                          <SelectItem key={genre.id} value={genre.name}>
-                            {genre.name}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <FormMessage className="font-light" />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="language"
-                render={({ field }) => (
-                  <FormItem>
-                    <Label>Language</Label>
-                    <Select
-                      disabled={loading}
-                      onValueChange={field.onChange}
-                      value={field.value}
-                      defaultValue={field.value}
-                    >
+                      <FormMessage className="font-light" />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <div className="col-span-1">
+                <FormField
+                  control={form.control}
+                  name="genreId"
+                  render={({ field }) => (
+                    <FormItem>
+                      <Label>Genre</Label>
+                      <Select
+                        disabled={loading}
+                        onValueChange={field.onChange}
+                        value={field.value}
+                        defaultValue={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue
+                              defaultValue={field.value}
+                              placeholder="Slect genre of Content"
+                            />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {genres?.map((genre: any) => (
+                            <SelectItem key={genre.id} value={genre.id}>
+                              {genre.genreName}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage className="font-light" />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <div className="col-span-1">
+                <FormField
+                  control={form.control}
+                  name="language"
+                  render={({ field }) => (
+                    <FormItem>
+                      <Label>Language</Label>
+                      <Select
+                        disabled={loading}
+                        onValueChange={field.onChange}
+                        value={field.value}
+                        defaultValue={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue
+                              defaultValue={field.value}
+                              placeholder="Select player's Genre"
+                            />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {languages.map((lan) => (
+                            <SelectItem key={lan.id} value={lan.name}>
+                              {lan.name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage className="font-light" />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <div className="col-span-1">
+                <FormItem>
+                  <Label>Thumbnail</Label>
+                  <Input
+                    name="thumbnail"
+                    type="file"
+                    className="cols-span-2"
+                    onChange={handleImageChange}
+                    placeholder="Upload your content thumbnail"
+                  />
+                  <Label className="font-light text-rose-500">
+                    {imageError && imageError}
+                  </Label>
+                </FormItem>
+              </div>
+              <div className="col-span-1">
+                <FormItem>
+                  <Label>Audio</Label>
+                  <Input
+                    className="cols-span-2"
+                    name="audio"
+                    type="file"
+                    onChange={handleAudioChange}
+                    placeholder="Upload your content audio"
+                  />
+                  <Label className="font-light text-rose-500">
+                    {audioError && audioError}
+                  </Label>
+                </FormItem>
+              </div>
+
+              <div className="col-span-2">
+                <FormField
+                  control={form.control}
+                  name="description"
+                  render={({ field }) => (
+                    <FormItem className="col-span-5">
+                      <Label>Description</Label>
                       <FormControl>
-                        <SelectTrigger>
-                          <SelectValue
-                            defaultValue={field.value}
-                            placeholder="Select player's Genre"
-                          />
-                        </SelectTrigger>
+                        <Textarea
+                          disabled={loading}
+                          placeholder="Short description of your content"
+                          {...field}
+                        />
                       </FormControl>
-                      <SelectContent>
-                        {languages.map((lan) => (
-                          <SelectItem key={lan.id} value={lan.name}>
-                            {lan.name}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <FormMessage className="font-light" />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="thumbnail"
-                render={({ field }) => (
-                  <FormItem className="col-span-5">
-                    <Label>Thumbnail</Label>
-                    <FormControl>
-                      <Input
-                        type="file"
-                        disabled={loading}
-                        placeholder="Upload your content thumbnail"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage className="font-light" />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="audio"
-                render={({ field }) => (
-                  <FormItem className="col-span-5">
-                    <Label>Audio File</Label>
-                    <FormControl>
-                      <Input
-                        type="file"
-                        disabled={loading}
-                        placeholder="Upload your content thumbnail"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage className="font-light" />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="description"
-                render={({ field }) => (
-                  <FormItem className="col-span-5">
-                    <Label>Description</Label>
-                    <FormControl>
-                      <Textarea
-                        disabled={loading}
-                        placeholder="Short description of your content"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage className="font-light" />
-                  </FormItem>
-                )}
-              />
+                      <FormMessage className="font-light" />
+                    </FormItem>
+                  )}
+                />
+              </div>
             </div>
 
             <Button
               variant="primary"
-              disabled={loading}
+              disabled={loading || posting}
               className="ml-auto min-w-fit w-1/4"
               type="submit"
             >
-              {action}
+              {posting ? (
+                <SpinerLoading text="Creating.." textHidden={false} />
+              ) : (
+                action
+              )}
             </Button>
           </form>
         </ScrollArea>
