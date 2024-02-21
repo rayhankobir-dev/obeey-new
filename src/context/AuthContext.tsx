@@ -188,8 +188,10 @@ export const AuthProvider = ({ children }: any) => {
   );
 };
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useAuth = () => useContext(AuthContext);
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useAxios = (): AxiosInstance => {
   const { accessToken }: any = useAuth();
   useEffect(() => {
